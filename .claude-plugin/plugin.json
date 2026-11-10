@@ -1,0 +1,10 @@
+{
+  "name": "terminal-gui",
+  "version": "0.1.0",
+  "description": "Restyles tool, agent and assistant rows in the terminal as GUI-like cards and chat bubbles, with running and finished states told apart.",
+  "author": { "name": "diyojenyazilim" },
+  "homepage": "https://github.com/diyojenyazilim/terminal-gui",
+  "repository": "https://github.com/diyojenyazilim/terminal-gui",
+  "license": "MIT",
+  "keywords": ["mod", "ui", "terminal", "cards", "chat-bubbles"]
+}
