@@ -17,6 +17,13 @@
 - **ToolGroup** card: `N tool calls · <status>`.
 - **ToolResult** gets a thin green border (red on error).
 - **Assistant replies** appear in a cyan, rounded "Claude" bubble. The title shows only on the first block of a reply.
+- **Your prompts** appear in a magenta, rounded "You" bubble. Task notifications and messages from other agents keep the default row.
+- **Spinner** (`Beaming… (1m 1s · …)`) gets an icon for the current phase: 📡 requesting, 🧠 thinking, ✍️ responding, ⌨️ tool input, 🔧 tool use. Only the word is changed, so the elapsed time and token count stay.
+- **Slash command output** (`/cost`, `/context` …) becomes a blue `/command` card (red on error).
+- **Turn end line** shows as a green `✓ Baked for 1m 4s`. The "waiting for background agents" variant keeps the default text.
+- **Run-in-background hint** (`ctrl+b`) is drawn as a yellow `↳` line under the tool.
+
+The `Tip: …` line under the spinner cannot be restyled by plugins; turn it off with the `tips` row in `/config` if you don't want it.
 
 It only affects the terminal surface. The expanded view (`ctrl+o` / `--verbose`) keeps the default drawing for tool rows, results and groups, and so do other surfaces.
 

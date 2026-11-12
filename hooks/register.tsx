@@ -81,4 +81,70 @@ export const register: Register = on => {
       </Box>
     )
   })
+
+  // Only what the person typed; notifications and peer messages keep the engine's dim row.
+  on('ui.render', { component: 'UserMessage' }, async ($, e, next) => {
+    if (e.surface !== 'terminal' || e.props.origin.kind !== 'composer') return next(e)
+
+    const { Box, Text } = $.ui.resolve(e)
+
+    return (
+      <Box flexDirection="column" borderStyle="round" borderColor="magenta" paddingX={1}>
+        <Text color="magenta" bold>You</Text>
+        {await next(e)}
+      </Box>
+    )
+  })
+
+  // Text rewrite only: a custom tree would drop the elapsed time and token count the engine adds.
+  on('ui.render', { component: 'Spinner' }, async ($, e, next) => {
+    if (e.surface !== 'terminal') return next(e)
+    return next({ ...e, props: { ...e.props, word: `${MODE_ICON[e.props.mode]} ${e.props.word}` } })
+  })
+
+  // Slash command output (/cost, /context ...) as a card titled with the command.
+  on('ui.render', { component: 'CommandOutput' }, async ($, e, next) => {
+    if (e.surface !== 'terminal') return next(e)
+
+    const { Box, Text } = $.ui.resolve(e)
+    const color = e.props.isErrored ? 'red' : 'blue'
+
+    return (
+      <Box flexDirection="column" borderStyle="round" borderColor={color} paddingX={1}>
+        <Text color={color} bold>/{e.props.command}</Text>
+        {await next(e)}
+      </Box>
+    )
+  })
+
+  // Turn-closing line as a green done mark; the waiting-for-agents variant keeps the engine's text.
+  on('ui.render', { component: 'TurnDuration' }, async ($, e, next) => {
+    if (e.surface !== 'terminal' || e.props.isExpanded || e.props.waitingFor) return next(e)
+
+    const { Text } = $.ui.resolve(e)
+
+    return <Text color="green">✓ {e.props.word} for {formatDuration(e.props.durationMs)}</Text>
+  })
+
+  // The "ctrl+b to run in background" pill, in the running color.
+  on('ui.render', { component: 'ToolProgress' }, async ($, e, next) => {
+    if (e.surface !== 'terminal' || !e.props.hint) return next(e)
+
+    const { Text } = $.ui.resolve(e)
+
+    return <Text color="yellow" dimColor>↳ {e.props.hint}</Text>
+  })
 }
+
+export const formatDuration = (ms: number) => {
+  const s = Math.round(ms / 1000)
+  return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${s % 60}s`
+}
+
+const MODE_ICON = {
+  requesting: '📡',
+  thinking: '🧠',
+  responding: '✍️',
+  'tool-input': '⌨️',
+  'tool-use': '🔧',
+} as const

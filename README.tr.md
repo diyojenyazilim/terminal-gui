@@ -17,6 +17,13 @@
 - **ToolGroup** kartı: `N tool calls · <durum>`.
 - **ToolResult** ince yeşil (hata ise kırmızı) çerçeve alır.
 - **Asistan yanıtları** cyan, yuvarlak köşeli "Claude" balonunda gösterilir. Başlık yalnız yanıtın ilk bloğunda çıkar.
+- **Senin mesajların** macenta, yuvarlak köşeli "You" balonunda gösterilir. Görev bildirimleri ve diğer ajanlardan gelen mesajlar varsayılan satırda kalır.
+- **Spinner** (`Beaming… (1m 1s · …)`) o anki aşamanın simgesini alır: 📡 istek, 🧠 düşünüyor, ✍️ yanıt yazıyor, ⌨️ araç girdisi, 🔧 araç çalışıyor. Yalnız kelime değişir; süre ve token sayısı korunur.
+- **Slash komut çıktısı** (`/cost`, `/context` …) mavi `/komut` kartı olur (hatada kırmızı).
+- **Tur sonu satırı** yeşil `✓ Baked for 1m 4s` olarak gösterilir. "Arka plan ajanlarını bekliyor" hâli varsayılan metni korur.
+- **Arka planda çalıştır ipucu** (`ctrl+b`) aracın altında sarı `↳` satırı olarak çizilir.
+
+Spinner altındaki `Tip: …` satırı eklentilerce şekillendirilemez; istemiyorsan `/config` içindeki `tips` satırından kapat.
 
 Yalnızca terminal yüzeyini etkiler. Genişletilmiş görünüm (`ctrl+o` / `--verbose`) araç satırları, sonuçlar ve gruplar için varsayılan çizimi korur; diğer yüzeyler de öyle.
 
