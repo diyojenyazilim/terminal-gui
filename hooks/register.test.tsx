@@ -1,4 +1,5 @@
 import { expect, test } from 'claude-code/testing'
+import { formatDuration } from './register.js'
 
 const base = { plugin: 'terminal-gui', component: 'ToolUse', surface: 'terminal' } as const
 
@@ -23,8 +24,17 @@ test('a typed prompt gets the You bubble', async ($) => {
   await typed.unmount()
 })
 
+test('a task notification gets its own card, not the You bubble', async ($) => {
+  const note = await $.ui.mount({
+    plugin: 'terminal-gui', component: 'UserMessage', surface: 'terminal', requestId: 'n1',
+    props: { text: 'done', origin: { kind: 'task-notification' }, isExpanded: false, task: { id: 'a1' } } as never,
+  })
+  expect(await note.find({ type: 'Text', text: /task/ })).toBeTruthy()
+  expect(await note.find({ type: 'Text', text: /^You$/ })).toBeFalsy()
+  await note.unmount()
+})
+
 test('turn duration reads like the engine', async () => {
-  const { formatDuration } = await import('./register')
   expect(formatDuration(3000)).toBe('3s')
   expect(formatDuration(64000)).toBe('1m 4s')
 })
